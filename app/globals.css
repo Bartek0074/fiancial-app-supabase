@@ -1,6 +1,4 @@
 @import 'tailwindcss';
 @plugin "@tailwindcss/forms";
 
-html {
-	@apply bg-white text-black dark:bg-slate-950 dark:text-slate-100;
-}
+@custom-variant dark (&:where(.dark, .dark *));
