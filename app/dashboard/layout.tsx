@@ -6,10 +6,10 @@ export default function DashboardLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<>
+		<div className='flex flex-col min-h-screen'>
 			<PageHeader className='my-8' />
 			<main>{children}</main>
-			<footer>Footer placeholder</footer>
-		</>
+			<footer className='mt-auto'>Footer</footer>
+		</div>
 	);
 }

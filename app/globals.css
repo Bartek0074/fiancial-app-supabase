@@ -2,3 +2,7 @@
 @plugin "@tailwindcss/forms";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+* {
+	transition: all 0.3s ease-in-out;
+}
