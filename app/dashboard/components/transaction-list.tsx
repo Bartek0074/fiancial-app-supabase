@@ -1,5 +1,6 @@
 import TransactionItem from '@/components/transaction-item';
 import TransactionSummaryItem from '@/components/transaction-summary-item';
+import Separator from '@/components/separator';
 
 const groupAndSumTransactionsByDate = (transactions: any[]) => {
 	const grouped: Record<string, { transactions: any[]; amount: number }> = {};
@@ -39,7 +40,7 @@ export default async function TransactionList({
 				return (
 					<div key={date}>
 						<TransactionSummaryItem date={date} amount={value.amount} />
-						<hr className='my-4 border-gray-200 dark:border-gray-800' />
+						<Separator />
 						<div className={`space-y-4 ${className}`}>
 							{value.transactions.map((transaction: any) => (
 								<div key={transaction.id}>
