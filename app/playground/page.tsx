@@ -7,6 +7,8 @@ import Label from '../../components/label';
 import Input from '../../components/input';
 import Select from '../../components/select';
 import Separator from '../../components/separator';
+import Skeleton from '../../components/skeleton';
+
 
 export default function Page() {
 	return (
@@ -123,6 +125,22 @@ export default function Page() {
 						<Label htmlFor='terms' className='ml-2'>
 							Accept terms
 						</Label>
+					</div>
+				</div>
+			</div>
+			<div>
+				<h2 className='mb-4 text-lg font-mono'>Loadin Skeleton</h2>
+				<Separator />
+				<div className='space-y-8'>
+					<div className='flex space-x-4'>
+						<Skeleton />
+						<Skeleton />
+						<Skeleton />
+					</div>
+					<div className='space-y-4'>
+						<Skeleton />
+						<Skeleton />
+						<Skeleton />
 					</div>
 				</div>
 			</div>
