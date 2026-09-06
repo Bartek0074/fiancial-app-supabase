@@ -31,7 +31,7 @@ export default async function RootLayout({ children }: LayoutProps<'/'>) {
       lang='en'
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased ${theme === 'dark' ? 'dark' : ''} `}
     >
-      <body className='flex flex-col min-h-screen bg-white text-black dark:bg-slate-950 dark:text-slate-100'>
+      <body className='flex flex-col min-h-screen bg-white text-black dark:bg-slate-950 dark:text-slate-100 px-8'>
         <Providers>
           <div className='flex flex-col mx-auto w-full max-w-4xl'>{children}</div>
         </Providers>
