@@ -29,7 +29,7 @@ type TransactionListProps = {
 export default async function TransactionList({
 	className,
 }: TransactionListProps) {
-	const res = await fetch('http://localhost:3100/transactions');
+	const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/transactions`);
 	const transactions = await res.json();
 
 	const groupedTransactions = groupAndSumTransactionsByDate(transactions);

@@ -8,7 +8,7 @@ type TrendProps = {
 export default async function Trend({
 	type,
 }: TrendProps) {
-	const response = await fetch(`http://localhost:3100/trends/${type}`);
+	const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/trends/${type}`);
 
 	const trend = await response.json();
 
