@@ -1,3 +1,5 @@
+import type { Metadata } from 'next';
+
 import PageHeader from '../../components/page-header';
 import Trend from '../../components/trend';
 import TransactionItem from '../../components/transaction-item';
@@ -9,6 +11,9 @@ import Select from '../../components/select';
 import Separator from '../../components/separator';
 import Skeleton from '../../components/skeleton';
 
+export const metadata: Metadata = {
+	title: "Playground"
+};
 
 export default function Page() {
 	return (

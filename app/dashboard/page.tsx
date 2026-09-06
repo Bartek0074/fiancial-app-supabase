@@ -1,3 +1,5 @@
+import type { Metadata } from 'next';
+
 import { Suspense } from 'react';
 
 import Link from 'next/link';
@@ -10,6 +12,10 @@ import TrendFallback from './components/trend-fallback';
 import { PlusCircle } from 'lucide-react';
 
 import { variants, sizes } from '../../lib/variants';
+
+export const metadata: Metadata = {
+	title: "Dashboard"
+};
 
 export default function Page() {
 	return (

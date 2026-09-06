@@ -8,7 +8,7 @@ export default function Label({ ...props }: LabelProps) {
 	return (
 		<label
 			{...props}
-			className={`text-gray-700 dark:text-gray-300 cursor-pointer ${props.className}`}
+			className={`block text-gray-700 dark:text-gray-300 cursor-pointer ${props.className}`}
 		>
 			{props.children}
 		</label>

@@ -6,3 +6,16 @@
 * {
 	transition: all 0.3s ease-in-out;
 }
+
+@layer utilities {
+	.no-spinner::-webkit-inner-spin-button,
+	.no-spinner::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+
+	.no-spinner {
+		appearance: textfield;
+		-moz-appearance: textfield;
+	}
+}
