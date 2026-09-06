@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Label from '@/components/label';
 import Select from '@/components/select';
@@ -9,15 +9,20 @@ import { types, categories } from '@/lib/consts';
 
 import { useForm } from 'react-hook-form';
 
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import { transactionSchema } from '@/lib/validation';
+
 type TransactionFormProps = {};
 
-export default function TransactionForm({ }: TransactionFormProps) {
+export default function TransactionForm({}: TransactionFormProps) {
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm({
-		mode: "onTouched"
+		mode: 'onTouched',
+		resolver: zodResolver(transactionSchema),
 	});
 
 	const onSubmit = (data: any) => {
@@ -51,41 +56,36 @@ export default function TransactionForm({ }: TransactionFormProps) {
 
 				<div>
 					<Label className='mb-1'>Transaction Date</Label>
-					<Input {...register('created_at', {
-						required: "The transaction date is required"
-					})} type='date' />
+					<Input {...register('created_at')} type='date' />
 					{errors.created_at && (
 						<p className='text-red-500 mt-1'>
-							{typeof errors.created_at.message === 'string' ? errors.created_at.message : ''}
+							{typeof errors.created_at.message === 'string'
+								? errors.created_at.message
+								: ''}
 						</p>
 					)}
 				</div>
 
 				<div>
 					<Label className='mb-1'>Amount</Label>
-					<Input {...register('amount', {
-						required: "The amount is required",
-						valueAsNumber: true,
-						min: {
-							value: 0,
-							message: "The amount must be greater than or equal to 0"
-						}
-					})} type='number' className='no-spinner' />
+					<Input {...register('amount')} type='number' className='no-spinner' />
 					{errors.amount && (
 						<p className='text-red-500 mt-1'>
-							{typeof errors.amount.message === 'string' ? errors.amount.message : ''}
+							{typeof errors.amount.message === 'string'
+								? errors.amount.message
+								: ''}
 						</p>
 					)}
 				</div>
 
 				<div className='col-span-1 md:col-span-2'>
 					<Label className='mb-1'>Description</Label>
-					<Input {...register('description', {
-						required: "The description is required"
-					})} type='text' />
+					<Input {...register('description')} type='text' />
 					{errors.description && (
 						<p className='text-red-500 mt-1'>
-							{typeof errors.description.message === 'string' ? errors.description.message : ''}
+							{typeof errors.description.message === 'string'
+								? errors.description.message
+								: ''}
 						</p>
 					)}
 				</div>
