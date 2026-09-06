@@ -8,18 +8,18 @@ import TrendFallback from './components/trend-fallback';
 export default function Page() {
 	return (
 		<div>
-			<section className="mb-8 grid grid-cols-2 lg:grid-cols-4 gap-8">
+			<section className='mb-8 grid grid-cols-2 lg:grid-cols-4 gap-8'>
 				<Suspense fallback={<TrendFallback />}>
-					<Trend type="Income" />
+					<Trend type='Income' />
 				</Suspense>
 				<Suspense fallback={<TrendFallback />}>
-					<Trend type="Expense" />
+					<Trend type='Expense' />
 				</Suspense>
 				<Suspense fallback={<TrendFallback />}>
-					<Trend type="Saving" />
+					<Trend type='Saving' />
 				</Suspense>
 				<Suspense fallback={<TrendFallback />}>
-					<Trend type="Investment" />
+					<Trend type='Investment' />
 				</Suspense>
 			</section>
 			<Suspense fallback={<TransactionListFallback />}>
