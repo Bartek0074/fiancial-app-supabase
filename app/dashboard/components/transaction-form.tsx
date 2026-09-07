@@ -1,5 +1,8 @@
 'use client';
 
+import { useState } from 'react';
+import { z } from 'zod';
+
 import Label from '@/components/label';
 import Select from '@/components/select';
 import Input from '@/components/input';
@@ -15,7 +18,9 @@ import { transactionSchema } from '@/lib/validation';
 
 type TransactionFormProps = {};
 
-export default function TransactionForm({}: TransactionFormProps) {
+export default function TransactionForm({ }: TransactionFormProps) {
+	const [isSaving, setIsSaving] = useState(false);
+
 	const {
 		register,
 		handleSubmit,
@@ -25,9 +30,27 @@ export default function TransactionForm({}: TransactionFormProps) {
 		resolver: zodResolver(transactionSchema),
 	});
 
-	const onSubmit = (data: any) => {
-		console.log(data);
-		console.log(process.env.NEXT_PUBLIC_API_URL);
+	const onSubmit = async (data: z.infer<typeof transactionSchema>) => {
+		setIsSaving(true);
+
+		try {
+			await fetch(`${process.env.NEXT_PUBLIC_API_URL}/transactions`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					amount: data.amount,
+					type: data.type,
+					description: data.description,
+					category: data.category,
+					created_at: `${data.created_at}T00:00:00`,
+				}),
+			});
+		}
+		finally {
+			setIsSaving(false);
+		}
 	};
 
 	return (
@@ -92,7 +115,9 @@ export default function TransactionForm({}: TransactionFormProps) {
 				</div>
 			</div>
 			<div className='flex justify-end'>
-				<Button type='submit'>Submit</Button>
+				<Button type='submit' disabled={isSaving}>
+					{isSaving ? 'Saving...' : 'Submit'}
+				</Button>
 			</div>
 		</form>
 	);
