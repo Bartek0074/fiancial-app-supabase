@@ -31,9 +31,24 @@
       "description": "Rent",
       "category": "Housing",
       "created_at": "2023-03-10T23:00:00"
+    },
+    {
+      "amount": 2,
+      "type": "Income",
+      "description": "Nowy wydatek :(",
+      "category": "Housing",
+      "created_at": "2026-02-14T00:00:00",
+      "id": 5
+    },
+    {
+      "amount": 120,
+      "type": "Income",
+      "description": "Nowy wydatek 2 :(",
+      "category": "Housing",
+      "created_at": "2026-09-14T00:00:00",
+      "id": 6
     }
   ],
-  
   "trends": [
     {
       "id": "Income",

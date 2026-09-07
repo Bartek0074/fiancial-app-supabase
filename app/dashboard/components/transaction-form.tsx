@@ -1,6 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+
+import { purgeTransactionListCache } from '@/lib/actions';
+
 import { z } from 'zod';
 
 import Label from '@/components/label';
@@ -18,7 +22,9 @@ import { transactionSchema } from '@/lib/validation';
 
 type TransactionFormProps = {};
 
-export default function TransactionForm({ }: TransactionFormProps) {
+export default function TransactionForm({}: TransactionFormProps) {
+	const router = useRouter();
+
 	const [isSaving, setIsSaving] = useState(false);
 
 	const {
@@ -47,8 +53,11 @@ export default function TransactionForm({ }: TransactionFormProps) {
 					created_at: `${data.created_at}T00:00:00`,
 				}),
 			});
-		}
-		finally {
+
+			await purgeTransactionListCache();
+
+			router.push('/dashboard');
+		} finally {
 			setIsSaving(false);
 		}
 	};
