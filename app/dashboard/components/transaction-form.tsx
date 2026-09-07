@@ -11,6 +11,7 @@ import Label from '@/components/label';
 import Select from '@/components/select';
 import Input from '@/components/input';
 import Button from '@/components/button';
+import FormError from '@/components/form-error';
 
 import { types, categories } from '@/lib/consts';
 
@@ -90,37 +91,19 @@ export default function TransactionForm({}: TransactionFormProps) {
 				<div>
 					<Label className='mb-1'>Transaction Date</Label>
 					<Input {...register('created_at')} type='date' />
-					{errors.created_at && (
-						<p className='text-red-500 mt-1'>
-							{typeof errors.created_at.message === 'string'
-								? errors.created_at.message
-								: ''}
-						</p>
-					)}
+					<FormError message={errors.created_at?.message as string} />
 				</div>
 
 				<div>
 					<Label className='mb-1'>Amount</Label>
 					<Input {...register('amount')} type='number' className='no-spinner' />
-					{errors.amount && (
-						<p className='text-red-500 mt-1'>
-							{typeof errors.amount.message === 'string'
-								? errors.amount.message
-								: ''}
-						</p>
-					)}
+					<FormError message={errors.amount?.message as string} />
 				</div>
 
 				<div className='col-span-1 md:col-span-2'>
 					<Label className='mb-1'>Description</Label>
 					<Input {...register('description')} type='text' />
-					{errors.description && (
-						<p className='text-red-500 mt-1'>
-							{typeof errors.description.message === 'string'
-								? errors.description.message
-								: ''}
-						</p>
-					)}
+					<FormError message={errors.description?.message as string} />
 				</div>
 			</div>
 			<div className='flex justify-end'>
