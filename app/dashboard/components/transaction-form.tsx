@@ -21,9 +21,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import { transactionSchema } from '@/lib/validation';
 
-type TransactionFormProps = {};
-
-export default function TransactionForm({}: TransactionFormProps) {
+export default function TransactionForm() {
 	const router = useRouter();
 
 	const [isSaving, setIsSaving] = useState(false);

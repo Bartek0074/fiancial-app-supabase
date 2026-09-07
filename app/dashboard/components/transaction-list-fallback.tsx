@@ -1,6 +1,3 @@
-import TransactionItem from '@/components/transaction-item';
-import TransactionSummaryItem from '@/components/transaction-summary-item';
-import Separator from '@/components/separator';
 import Skeleton from '@/components/skeleton';
 
 
