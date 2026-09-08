@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 
 import { Suspense } from 'react';
-import { createClient } from '@/lib/supabase/server';
 
 import Link from 'next/link';
 
@@ -18,13 +17,7 @@ export const metadata: Metadata = {
 	title: "Dashboard"
 };
 
-export default async function Page() {
-	const supabase = await createClient();
-
-	const transactions = await supabase.from('transactions').select('*');
-
-	console.log(transactions)
-
+export default function Page() {
 	return (
 		<div>
 			<section className='mb-8'>

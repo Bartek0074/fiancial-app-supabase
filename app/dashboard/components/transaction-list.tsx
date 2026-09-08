@@ -1,3 +1,5 @@
+import { createClient } from '@/lib/supabase/server';
+
 import TransactionItem from '@/components/transaction-item';
 import TransactionSummaryItem from '@/components/transaction-summary-item';
 import Separator from '@/components/separator';
@@ -29,14 +31,16 @@ type TransactionListProps = {
 export default async function TransactionList({
 	className,
 }: TransactionListProps) {
-	const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/transactions`, {
-		next: {
-			tags: ['transaction-list'],
-		},
-	});
-	const transactions = await res.json();
+	const supabase = await createClient();
 
-	const groupedTransactions = groupAndSumTransactionsByDate(transactions);
+	const { data: transactions, error } = await supabase
+		.from('transactions')
+		.select('*')
+		.order('created_at', { ascending: true });
+
+	const groupedTransactions = groupAndSumTransactionsByDate(
+		transactions as any,
+	);
 
 	return (
 		<div className={`space-y-8 ${className}`}>
