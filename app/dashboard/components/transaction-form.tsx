@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { purgeTransactionListCache } from '@/lib/actions';
+import { createTransaction } from '@/lib/actions';
 
 import { z } from 'zod';
 
@@ -25,6 +25,7 @@ export default function TransactionForm() {
 	const router = useRouter();
 
 	const [isSaving, setIsSaving] = useState(false);
+	const [lastError, setLastError] = useState<Error | null>(null);
 
 	const {
 		register,
@@ -37,25 +38,20 @@ export default function TransactionForm() {
 
 	const onSubmit = async (data: z.infer<typeof transactionSchema>) => {
 		setIsSaving(true);
+		setLastError(null);
 
 		try {
-			await fetch(`${process.env.NEXT_PUBLIC_API_URL}/transactions`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					amount: data.amount,
-					type: data.type,
-					description: data.description,
-					category: data.category,
-					created_at: `${data.created_at}T00:00:00`,
-				}),
+			await createTransaction({
+				amount: data.amount,
+				type: data.type,
+				description: data.description,
+				category: data.category,
+				created_at: data.created_at,
 			});
 
-			await purgeTransactionListCache();
-
 			router.push('/dashboard');
+		} catch (error) {
+			setLastError(error as Error);
 		} finally {
 			setIsSaving(false);
 		}
@@ -104,7 +100,10 @@ export default function TransactionForm() {
 					<FormError message={errors.description?.message as string} />
 				</div>
 			</div>
-			<div className='flex justify-end'>
+			<div className='flex justify-between items-center'>
+				<div>
+					{lastError?.message && <FormError message={lastError.message} />}
+				</div>
 				<Button type='submit' disabled={isSaving}>
 					{isSaving ? 'Saving...' : 'Submit'}
 				</Button>
