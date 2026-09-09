@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import Link from 'next/link';
 
@@ -12,9 +13,10 @@ import TrendFallback from './components/trend-fallback';
 import { PlusCircle } from 'lucide-react';
 
 import { variants, sizes } from '../../lib/variants';
+import { types } from '../../lib/consts';
 
 export const metadata: Metadata = {
-	title: "Dashboard"
+	title: 'Dashboard',
 };
 
 export default function Page() {
@@ -25,18 +27,16 @@ export default function Page() {
 			</section>
 
 			<section className='mb-8 grid grid-cols-2 lg:grid-cols-4 gap-8'>
-				<Suspense fallback={<TrendFallback />}>
-					<Trend type='Income' />
-				</Suspense>
-				<Suspense fallback={<TrendFallback />}>
-					<Trend type='Expense' />
-				</Suspense>
-				<Suspense fallback={<TrendFallback />}>
-					<Trend type='Saving' />
-				</Suspense>
-				<Suspense fallback={<TrendFallback />}>
-					<Trend type='Investment' />
-				</Suspense>
+				{types.map((type) => (
+					<ErrorBoundary
+						key={type}
+						fallback={<p className='text-red-500'>Cannot fetch {type} trend</p>}
+					>
+						<Suspense fallback={<TrendFallback />}>
+							<Trend type={type} />
+						</Suspense>
+					</ErrorBoundary>
+				))}
 			</section>
 
 			<section className='flex justify-between items-center mb-8'>
