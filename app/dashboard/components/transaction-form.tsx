@@ -24,17 +24,20 @@ import { transactionSchema } from '@/lib/validation';
 export default function TransactionForm() {
 	const router = useRouter();
 
-	const [isSaving, setIsSaving] = useState(false);
-	const [lastError, setLastError] = useState<Error | null>(null);
-
 	const {
 		register,
 		handleSubmit,
+		watch,
+		setValue,
 		formState: { errors },
 	} = useForm({
 		mode: 'onTouched',
 		resolver: zodResolver(transactionSchema),
 	});
+
+	const [isSaving, setIsSaving] = useState(false);
+	const [lastError, setLastError] = useState<Error | null>(null);
+	const type = watch("type");
 
 	const onSubmit = async (data: z.infer<typeof transactionSchema>) => {
 		setIsSaving(true);
@@ -62,7 +65,13 @@ export default function TransactionForm() {
 			<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
 				<div>
 					<Label className='mb-1'>Type</Label>
-					<Select {...register('type')}>
+					<Select {...register('type', {
+						onChange: (e) => {
+							if(e.target.value !== 'Expense') {
+								setValue('category', '');
+							}
+						}
+					})}>
 						{types.map((type) => (
 							<option key={type} value={type}>
 								{type}
@@ -73,13 +82,15 @@ export default function TransactionForm() {
 
 				<div>
 					<Label className='mb-1'>Category</Label>
-					<Select {...register('category')}>
+					<Select {...register('category')} disabled={type !== 'Expense'}>
+						<option value="">Select a category</option>
 						{categories.map((category) => (
 							<option key={category} value={category}>
 								{category}
 							</option>
 						))}
 					</Select>
+					<FormError message={errors.category?.message as string} />
 				</div>
 
 				<div>
