@@ -34,10 +34,10 @@ async function seed() {
 
 		const typeBias = Math.random();
 
-		if (typeBias < 0.8) {
+		if (typeBias < 0.6) {
 			type = 'Expense';
 			category = faker.helpers.arrayElement(categories);
-		} else if (typeBias < 0.9) {
+		} else if (typeBias < 0.8) {
 			type = 'Income';
 		} else {
 			type = faker.helpers.arrayElement(['Investment', 'Saving']);

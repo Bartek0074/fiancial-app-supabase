@@ -1,20 +1,22 @@
-
 import BaseTrend from '@/components/trend';
+import { createClient } from '@/lib/supabase/server';
 
 type TrendProps = {
-	type: "Income" | "Expense" | "Saving" | "Investment";
+	type: 'Income' | 'Expense' | 'Saving' | 'Investment';
+	range: 'last24hours' | 'last7days' | 'last30days' | 'last12months';
 };
 
-export default async function Trend({
-	type,
-}: TrendProps) {
-	const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/trends/${type}`);
+export default async function Trend({ type,range }: TrendProps) {
+	const supabase = await createClient();
 
-	const trend = await response.json();
+	let { data, error } = await supabase.rpc('calculate_total', {
+		range_arg: range,
+		type_arg: type,
+	});
 
-	const { amount, prevAmount } = trend;
+	if (error) {
+		throw new Error(error.message);
+	}
 
-	return (
-		<BaseTrend type={type} amount={amount} prevAmount={prevAmount} />
-	);
+	return <BaseTrend type={type} amount={data[0].current_amount} prevAmount={data[0].previous_amount} />;
 }
