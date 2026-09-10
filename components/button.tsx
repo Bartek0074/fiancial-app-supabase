@@ -3,7 +3,7 @@ import { ButtonHTMLAttributes } from 'react';
 import { variants, sizes } from '../lib/variants';
 
 type ButtonProps = {
-	variant?: 'default' | 'outline' | 'ghost';
+	variant?: 'default' | 'outline' | 'ghost' | 'danger';
 	size?: 'xs' | 'sm' | 'base' | 'lg';
 } & ButtonHTMLAttributes<HTMLButtonElement>;
 

@@ -27,7 +27,6 @@ export default function TransactionList({
 	className,
 }: TransactionListProps) {
 	const [transactions, setTransactions] = useState(initialTransactions);
-	const [offset, setOffset] = useState(initialTransactions.length);
 	const [buttonHidden, setButtonHidden] = useState(
 		initialTransactions.length === 0,
 	);
@@ -43,19 +42,23 @@ export default function TransactionList({
 		try {
 			nextTransactions = await fetchTransactions({
 				range,
-				offset,
+				offset: transactions.length,
 				limit: LIMIT,
 			});
 			setTransactions((prevTransactions) => [
 				...prevTransactions,
 				...nextTransactions,
 			]);
-			setOffset((prevValue) => prevValue + LIMIT);
 			setButtonHidden(nextTransactions.length < LIMIT);
 		} finally {
 			setIsLoading(false);
 		}
+	};
 
+	const handleRemoved = (id: number) => {
+		setTransactions(prevTransactions =>
+			prevTransactions.filter((transaction) => transaction.id !== id)
+		);
 	};
 
 	return (
@@ -69,10 +72,12 @@ export default function TransactionList({
 							{value.transactions.map((transaction: any) => (
 								<div key={transaction.id}>
 									<TransactionItem
+										id={transaction.id}
 										type={transaction.type}
 										amount={transaction.amount}
 										description={transaction.description}
 										category={transaction.category}
+										onRemoved={() => handleRemoved(transaction.id)}
 									/>
 								</div>
 							))}

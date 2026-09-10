@@ -2,6 +2,8 @@
 
 import { createClient } from '@/lib/supabase/server';
 
+import {revalidatePath} from 'next/cache';
+
 import { transactionSchema } from '@/lib/validation';
 
 export async function createTransaction(formData: unknown) {
@@ -36,7 +38,19 @@ export async function fetchTransactions({
 		offset_arg: offset,
 		range_arg: range,
 	});
-	if (error) throw new Error(error.message);
+	if (error) throw new Error('Failed fetching transactions');
 
 	return data;
+}
+
+export async function deleteTransaction(id: number) {
+	const supabase = await createClient();
+
+	const { error } = await supabase.from('transactions').delete().eq('id', id);
+
+	if (error) {
+		throw new Error('Failed deleting the transaction');
+	}
+	
+	revalidatePath('/dashboard');
 }
