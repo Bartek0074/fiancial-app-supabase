@@ -1,0 +1,20 @@
+import Skeleton from "@/components/skeleton";
+
+export default async function Loading() {
+	return (
+		<div>
+			<section className='mb-8'>
+				<h1 className='text-4xl font-semibold'>Edit Transaction</h1>
+			</section>
+			<div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+				<Skeleton className='h-12' />
+				<Skeleton className='h-12' />
+				<Skeleton className='h-12' />
+				<Skeleton className='h-12' />
+				<Skeleton className='h-12' />
+				<Skeleton className='h-12' />
+				<Skeleton className='h-12 md:col-span-2' />
+			</div>
+		</div>
+	);
+}
