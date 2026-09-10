@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { createTransaction } from '@/lib/actions';
+import { createTransaction, updateTransaction } from '@/lib/actions';
 
 import { z } from 'zod';
 
@@ -22,7 +22,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { transactionSchema } from '@/lib/validation';
 
 type TransactionFormType = {
-	initialData?: z.infer<typeof transactionSchema>;
+	initialData?: z.infer<typeof transactionSchema> & { id?: string };
 };
 
 export default function TransactionForm({ initialData }: TransactionFormType) {
@@ -39,21 +39,21 @@ export default function TransactionForm({ initialData }: TransactionFormType) {
 		resolver: zodResolver(transactionSchema),
 		defaultValues: initialData
 			? {
-					created_at: new Date(initialData.created_at)
-						.toISOString()
-						.split('T')[0],
-					type: initialData.type ?? undefined,
-					category: initialData.category ?? '',
-					amount: initialData.amount ?? 0,
-					description: initialData.description ?? '',
-				}
+				created_at: new Date(initialData.created_at)
+					.toISOString()
+					.split('T')[0],
+				type: initialData.type ?? undefined,
+				category: initialData.category ?? '',
+				amount: initialData.amount ?? 0,
+				description: initialData.description ?? '',
+			}
 			: {
-					created_at: new Date().toISOString().split('T')[0],
-					type: undefined,
-					category: '',
-					amount: 0,
-					description: '',
-				},
+				created_at: new Date().toISOString().split('T')[0],
+				type: undefined,
+				category: '',
+				amount: 0,
+				description: '',
+			},
 	});
 
 	const [isSaving, setIsSaving] = useState(false);
@@ -67,7 +67,19 @@ export default function TransactionForm({ initialData }: TransactionFormType) {
 
 		try {
 			if (editing) {
-				// Implement the update transaction logic here
+				const id = initialData?.id;
+
+				if (id) {
+					await updateTransaction(id, {
+						amount: data.amount,
+						type: data.type,
+						description: data.description,
+						category: data.category,
+						created_at: data.created_at,
+					});
+				} else {
+					throw new Error('Missing transaction ID for update');
+				}
 			} else {
 				await createTransaction({
 					amount: data.amount,

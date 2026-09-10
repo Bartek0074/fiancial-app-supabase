@@ -26,8 +26,6 @@ export default async function Page({
 
 	if (error) notFound();
 
-	console.log(transaction);
-
 	return (
 		<div>
 			<section className='mb-8'>

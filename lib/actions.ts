@@ -2,7 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 
-import {revalidatePath} from 'next/cache';
+import { revalidatePath } from 'next/cache';
 
 import { transactionSchema } from '@/lib/validation';
 
@@ -51,6 +51,25 @@ export async function deleteTransaction(id: number) {
 	if (error) {
 		throw new Error('Failed deleting the transaction');
 	}
-	
+
 	revalidatePath('/dashboard');
+}
+
+export async function updateTransaction(id: string, formData: unknown) {
+	const validated = transactionSchema.safeParse(formData);
+
+	if (!validated.success) {
+		throw new Error('Invalid transaction data');
+	}
+
+	const supabase = await createClient();
+
+	const { error } = await supabase
+		.from('transactions')
+		.update(validated.data)
+		.eq('id', id);
+
+	if (error) {
+		throw new Error('Failed updating the transaction');
+	}
 }
