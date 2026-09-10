@@ -6,6 +6,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import Link from 'next/link';
 
 import TransactionList from './components/transaction-list';
+import TransactionListWrapper from './components/transaction-list-wrapper';
 import TransactionListFallback from './components/transaction-list-fallback';
 import Trend from './components/trend';
 import TrendFallback from './components/trend-fallback';
@@ -29,15 +30,15 @@ export default async function Page({
 	const range = searchParamsResolved?.range ?? 'last30days';
 
 	return (
-		<div>
-			<section className='mb-8 flex justify-between items-center'>
+		<div className='space-y-12'>
+			<section className='flex justify-between items-center'>
 				<h1 className='text-4xl font-semibold'>Summary</h1>
 				<aside>
 					<Range />
 				</aside>
 			</section>
 
-			<section className='mb-8 grid grid-cols-2 lg:grid-cols-4 gap-8'>
+			<section className='grid grid-cols-2 lg:grid-cols-4 gap-8'>
 				{types.map((type) => (
 					<ErrorBoundary
 						key={type}
@@ -59,7 +60,7 @@ export default async function Page({
 				))}
 			</section>
 
-			<section className='flex justify-between items-center mb-8'>
+			<section className='flex justify-between items-center'>
 				<h2 className='text-2xl font-semibold'>Transactions</h2>
 				<Link
 					href='/dashboard/transaction/add'
@@ -71,7 +72,11 @@ export default async function Page({
 			</section>
 
 			<Suspense fallback={<TransactionListFallback />}>
-				<TransactionList />
+				<TransactionListWrapper
+					range={
+						range as 'last24hours' | 'last7days' | 'last30days' | 'last12months'
+					}
+				/>
 			</Suspense>
 		</div>
 	);

@@ -1,35 +1,44 @@
-declare
-  currentStart timestamp;
-  currentEnd timestamp;
-  previousStart timestamp;
-  previousEnd timestamp;
-begin
-  currentEnd := now();
-  currentStart := case
-    when range_arg = 'last24hours' then currentEnd - interval '24 hours'
-    when range_arg = '7days' then currentEnd - interval '7 days'
-    when range_arg = 'last30days' then currentEnd - interval '30 days'
-    when range_arg = 'last12months' then currentEnd - interval '12 months'
-    else currentEnd - interval '30 days'
-  end;
-  previousEnd := currentStart - interval '1 second';
-  previousStart := currentStart - (currentEnd - currentStart);
+CREATE OR REPLACE FUNCTION calculate_total (
+	range_arg VARCHAR DEFAULT 'last30days',
+	type_arg VARCHAR DEFAULT null
+) RETURNS TABLE(current_amount NUMERIC, previous_amount NUMERIC) as $$ 
+DECLARE
+	currentStart TIMESTAMP;
+	currentEnd TIMESTAMP;
+	previousStart TIMESTAMP;
+	previousEnd TIMESTAMP;
+BEGIN
+	currentEnd := now();
+	CASE range_arg
+		WHEN 'last24hours' THEN
+            currentStart := currentEnd - INTERVAL '24 hours';
+		WHEN 'last7days' THEN
+            currentStart := currentEnd - INTERVAL '7 days';
+		WHEN 'last30days' THEN 
+            currentStart := currentEnd - INTERVAL '30 days';
+		WHEN 'last12months' THEN 
+            currentStart := currentEnd - INTERVAL '12 months';
+		ELSE 
+            currentStart := currentEnd - INTERVAL '30 days';    
+	END CASE;
 
-  current_amount :=(
-    select COALESCE(SUM(amount), 0)
-    from transactions
-    where
-      (type = type_arg or type_arg is null)
-    and (created_at between currentStart and currentEnd)
-  );
+	previousEnd := currentStart - INTERVAL '1 second';
+	previousStart := currentStart - (currentEnd - currentStart);
 
-  previous_amount :=(
-    select COALESCE(SUM(amount), 0)
-    from transactions
-    where
-      (type = type_arg or type_arg is null)
-    and (created_at between previousStart and previousEnd)
-  );
-
-  return next;
-end;
+	current_amount := (
+		SELECT COALESCE(SUM(amount), 0)
+		FROM transactions 
+		WHERE
+			(type = type_arg OR type_arg IS NULL)
+			AND (created_at BETWEEN currentStart AND currentEnd)
+	);
+	previous_amount := (
+		SELECT COALESCE(SUM(amount), 0)
+		FROM transactions
+		WHERE
+			(type = type_arg OR type_arg IS NULL)
+			AND (created_at BETWEEN previousStart AND previousEnd)
+	);
+	RETURN NEXT;
+END;
+$$ LANGUAGE plpgsql

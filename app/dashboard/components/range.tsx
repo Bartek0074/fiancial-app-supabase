@@ -25,7 +25,7 @@ export default function Range({ }: RangeProps) {
 	}
 
 	return (
-		<Select defaultValue={range} onChange={handleChange} >
+		<Select value={range} onChange={handleChange} >
 			<option value='last24hours'>Last 24 hours</option>
 			<option value='last7days'>Last 7 days</option>
 			<option value='last30days'>Last 30 days</option>

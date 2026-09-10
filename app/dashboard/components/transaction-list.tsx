@@ -1,45 +1,20 @@
-import { createClient } from '@/lib/supabase/server';
-
 import TransactionItem from '@/components/transaction-item';
 import TransactionSummaryItem from '@/components/transaction-summary-item';
 import Separator from '@/components/separator';
 
-const groupAndSumTransactionsByDate = (transactions: any[]) => {
-	const grouped: Record<string, { transactions: any[]; amount: number }> = {};
-
-	for (const transaction of transactions) {
-		const date = transaction.created_at.split('T')[0];
-
-		if (!grouped[date]) {
-			grouped[date] = { transactions: [], amount: 0 };
-		}
-		grouped[date].transactions.push(transaction);
-
-		const amount =
-			transaction.type === 'Expense' ? -transaction.amount : transaction.amount;
-
-		grouped[date].amount += amount;
-	}
-
-	return grouped;
-};
+import { groupAndSumTransactionsByDate } from '@/lib/utils';
 
 type TransactionListProps = {
+	initialTransactions: any[];
 	className?: string;
 };
 
-export default async function TransactionList({
+export default function TransactionList({
+	initialTransactions,
 	className,
 }: TransactionListProps) {
-	const supabase = await createClient();
-
-	const { data: transactions, error } = await supabase
-		.from('transactions')
-		.select('*')
-		.order('created_at', { ascending: false });
-
 	const groupedTransactions = groupAndSumTransactionsByDate(
-		transactions as any,
+		initialTransactions as any,
 	);
 
 	return (

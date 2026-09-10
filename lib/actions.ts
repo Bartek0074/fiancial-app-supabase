@@ -19,3 +19,24 @@ export async function createTransaction(formData: unknown) {
 		throw new Error('Failed creating the transaction');
 	}
 }
+
+export async function fetchTransactions({
+	limit = 10,
+	offset = 0,
+	range,
+}: {
+	limit?: number;
+	offset?: number;
+	range: 'last24hours' | 'last7days' | 'last30days' | 'last12months';
+}) {
+	const supabase = await createClient();
+
+	let { data, error } = await supabase.rpc('fetch_transactions', {
+		limit_arg: limit,
+		offset_arg: offset,
+		range_arg: range,
+	});
+	if (error) throw new Error(error.message);
+
+	return data;
+}
