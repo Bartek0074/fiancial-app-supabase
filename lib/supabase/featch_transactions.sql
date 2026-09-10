@@ -25,7 +25,7 @@ BEGIN
 		SELECT *
 		FROM transactions
 		WHERE created_at BETWEEN startDate AND endDate
-		ORDER BY created_at DESC
+		ORDER BY created_at DESC, id DESC
 		LIMIT limit_arg OFFSET offset_arg;
 END;
 $$ LANGUAGE plpgsql;

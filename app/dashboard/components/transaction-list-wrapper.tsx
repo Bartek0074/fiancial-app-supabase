@@ -14,6 +14,11 @@ export default async function TransactionListWrapper({
 	const transactions = await fetchTransactions({ range });
 
 	return (
-		<TransactionList initialTransactions={transactions} className={className} />
+		<TransactionList
+			key={range}
+			initialTransactions={transactions}
+			range={range}
+			className={className}
+		/>
 	);
 }
