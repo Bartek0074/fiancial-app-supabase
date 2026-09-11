@@ -82,15 +82,25 @@ export type LoginState = {
 export async function login(prevState: LoginState, formData: FormData) {
 	const email = formData.get('email');
 
-	if (email === 'barti@gmail.com') {
+	const supabase = await createClient();
+
+	const { error } = await supabase.auth.signInWithOtp({
+		email: email as string,
+		options: {
+			shouldCreateUser: true,
+			
+		},
+	});
+
+	if (error) {
 		return {
-			error: false,
-			message: 'Login successful',
+			error: true,
+			message: 'Something went wrong',
 		};
 	}
 
 	return {
-		error: true,
-		message: 'Invalid email',
+		error: false,
+		message: `Email sent to ${email}`,
 	};
 }
