@@ -73,3 +73,24 @@ export async function updateTransaction(id: string, formData: unknown) {
 		throw new Error('Failed updating the transaction');
 	}
 }
+
+export type LoginState = {
+	message: string;
+	error: boolean;
+};
+
+export async function login(prevState: LoginState, formData: FormData) {
+	const email = formData.get('email');
+
+	if (email === 'barti@gmail.com') {
+		return {
+			error: false,
+			message: 'Login successful',
+		};
+	}
+
+	return {
+		error: true,
+		message: 'Invalid email',
+	};
+}
