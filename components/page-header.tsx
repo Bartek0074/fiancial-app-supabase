@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import DarkModeToggle from './dark-mode-toggle';
 import Button from './button';
+import SignOutButton from './sign-out-button';
 
 import useServerDarkMode from '@/hooks/use-server-dark-mode';
 
@@ -41,6 +42,7 @@ export default async function PageHeader({ className }: PageHeaderProps) {
 						</div>
 					</Button>
 				)}
+				{user && <SignOutButton/>}
 				{!user && (
 					<Link href='/login' className={`${variants.ghost} ${sizes.sm}`}>
 						<KeyRound className='w-5 h-5' />

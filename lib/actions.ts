@@ -6,6 +6,8 @@ import { revalidatePath } from 'next/cache';
 
 import { transactionSchema } from '@/lib/validation';
 
+import { redirect } from 'next/navigation';
+
 export async function createTransaction(formData: unknown) {
 	const validated = transactionSchema.safeParse(formData);
 
@@ -88,7 +90,6 @@ export async function login(prevState: LoginState, formData: FormData) {
 		email: email as string,
 		options: {
 			shouldCreateUser: true,
-			
 		},
 	});
 
@@ -103,4 +104,16 @@ export async function login(prevState: LoginState, formData: FormData) {
 		error: false,
 		message: `Email sent to ${email}`,
 	};
+}
+
+export async function signOut() {
+	const supabase = await createClient();
+
+	const { error } = await supabase.auth.signOut();
+
+	if (error) {
+		throw new Error('Failed signing out');
+	}
+
+	redirect('/login');
 }
