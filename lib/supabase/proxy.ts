@@ -38,7 +38,17 @@ export async function updateSession(request: NextRequest) {
 
 	// IMPORTANT: If you remove getClaims() and you use server-side rendering
 	// with the Supabase client, your users may be randomly logged out.
-	await supabase.auth.getClaims();
+	const { data: claims } = await supabase.auth.getClaims();
+
+	const pathname = request.nextUrl.pathname;
+
+	if (!claims && !pathname.startsWith('/login')) {
+		return Response.redirect(new URL('/login', request.url));
+	}
+
+	if (claims && pathname.startsWith('/login')) {
+		return Response.redirect(new URL('/dashboard', request.url));
+	}
 
 	return supabaseResponse;
 }
