@@ -1,8 +1,22 @@
-import { type NextRequest } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 import { updateSession } from '@/lib/supabase/proxy';
+import { createClient } from './lib/supabase/server';
 
 export async function proxy(request: NextRequest) {
-	// update user's auth session
+	const supabase = await createClient();
+
+	const {
+		data: { user },
+	} = await supabase.auth.getUser();
+
+	if (!user && request.nextUrl.pathname.startsWith('/dashboard')) {
+		return Response.redirect(new URL('/login', request.url));
+	}
+
+	if (user && request.nextUrl.pathname.startsWith('/login')) {
+		return Response.redirect(new URL('/dashboard', request.url));
+	}
+
 	return await updateSession(request);
 }
 
