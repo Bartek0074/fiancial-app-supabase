@@ -35,12 +35,12 @@ export default async function PageHeader({ className }: PageHeaderProps) {
 			<div className='flex items-center space-x-2'>
 				<DarkModeToggle defaultMode={theme as 'light' | 'dark'} />
 				{user && (
-					<Button variant='ghost' size='sm'>
+					<Link href='/dashboard/settings/profile' className={`${variants.ghost} ${sizes.sm}`}>
 						<div className='flex items-center space-x-2'>
 							<CircleUser className='w-5 h-5' />
 							<span>{user.email}</span>
 						</div>
-					</Button>
+					</Link>
 				)}
 				{user && <SignOutButton/>}
 				{!user && (
