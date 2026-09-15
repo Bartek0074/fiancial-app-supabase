@@ -8,6 +8,7 @@ export default function Input({ ...props }: InputProps) {
 	const styles = {
 		checkbox:
 			'cursor-pointer rounded border-gray-300 text-gray-700 bg-white dark:bg-gray-950 dark:text-gray-500 shadow-sm disabled:opacity-25',
+		file: 'file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:opacity-50 dark:file:text-gray-400',
 		default:
 			'cursor-text w-full rounded-md shadow-sm border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-950 disabled:opacity-25',
 	};
@@ -15,7 +16,7 @@ export default function Input({ ...props }: InputProps) {
 	return (
 		<input
 			{...props}
-			className={`${props.type === 'checkbox' ? styles.checkbox : styles.default} ${props.className}`}
+			className={`${props.type === 'checkbox' ? styles.checkbox : props.type === 'file' ? styles.file : styles.default} ${props.className}`}
 		/>
 	);
 }

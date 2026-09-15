@@ -117,3 +117,31 @@ export async function signOut() {
 
 	redirect('/login');
 }
+
+export async function uploadAvatar(formData: FormData) {
+	const supabase = await createClient();
+
+	const file = formData.get('file') as File;
+
+	const fileExtension = file.name.split('.').pop();
+
+	const fileName = `${Math.random()}.${fileExtension}`;
+
+	const { error } = await supabase.storage
+		.from('avatars')
+		.upload(fileName, file);
+
+	if (error) {
+		throw new Error('Failed uploading the avatar');
+	}
+
+	const { error: dataUpdateError } = await supabase.auth.updateUser({
+		data: {
+			avatar: fileName,
+		},
+	});
+
+	if (dataUpdateError) {
+		throw new Error('Failed updating the avatar URL');
+	}
+}
